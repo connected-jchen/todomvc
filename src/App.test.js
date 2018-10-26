@@ -1,15 +1,35 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import App from './App';
 import { shallow } from 'enzyme';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
+const defaultState = {
+  todos: ["foo", "bar"],
+};
 
-it('renders without crashing', () => {
+describe('App', () => {
+
   const wrapper = shallow(<App />);
-  expect(wrapper.exists()).toBeTruthy();
+
+  it('renders without crashing', () => {
+    expect(wrapper.exists()).toBeTruthy();
+  });
+
+  describe('when a new item is added', () => {
+    const newItem = 'new todo';
+
+    beforeAll(() => {
+      wrapper.setState(defaultState);      
+      const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');
+      onSubmitDelegate(newItem);
+    })
+
+    it('should be updated in state', () => {      
+      expect(wrapper.state('todos')).toContain(newItem);
+    });
+
+    it('should render the newly added item', () => {
+      expect(wrapper.find('li')).toHaveLength(3);
+      expect(wrapper.find('li').at(2).text()).toEqual('new todo');
+    });
+  })
 });
