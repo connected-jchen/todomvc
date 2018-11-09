@@ -14,8 +14,8 @@ class InputBox extends Component {
         const onSubmit = this.props.onSubmit;
         return (
             <div>
-                <input type="text" onChange={this.onInputChange} />,
-                <button onClick={() => { onSubmit(this.state.text) }}>ok</button>,
+                <input type="text" onChange={this.onInputChange} />
+                <button onClick={() => { onSubmit(this.state.text) }}>ok</button>
             </div>
         );
     }
