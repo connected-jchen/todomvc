@@ -34,8 +34,4 @@ describe('InputBox', () => {
       defaultProps.onSubmit.mockReset();
     });
   });
-
-  describe('when the input is changed', () => {
-
-  });
 });

@@ -28,8 +28,7 @@ describe('App', () => {
     });
 
     it('should render the newly added item', () => {
-      expect(wrapper.find('li')).toHaveLength(3);
-      expect(wrapper.find('li').at(2).text()).toEqual('new todo');
+      expect(wrapper.find('TodoList').props().todos).toEqual([...defaultState.todos, newItem]);
     });
   })
 });

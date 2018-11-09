@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import InputBox from './InputBox';
+import TodoList from './TodoList';
 
 class App extends Component {
   constructor(props) {
@@ -13,9 +14,7 @@ class App extends Component {
     return (
       <div className="App">
         <InputBox onSubmit={todo => this.setState((prevState) => ({ todos: [...prevState.todos, todo] }))} />
-        <ul>
-          {this.state.todos.map((x, i) => <li key={i}>{x}</li>)}
-        </ul>
+        <TodoList todos={this.state.todos} />
       </div>
     );
   }
