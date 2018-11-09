@@ -7,7 +7,7 @@ const defaultState = {
 };
 
 const defaultProps = {
-    onSubmit: jest.fn()
+  onSubmit: jest.fn()
 };
 
 describe('InputBox', () => {
@@ -25,13 +25,13 @@ describe('InputBox', () => {
       wrapper.find('button').simulate('click');
     })
 
-    it('should call the onSubmit callback with correct value', () => {      
-        expect(defaultProps.onSubmit).toHaveBeenCalledTimes(1);
-        expect(defaultProps.onSubmit).toHaveBeenCalledWith(defaultState.text);
+    it('should call the onSubmit callback with correct value', () => {
+      expect(defaultProps.onSubmit).toHaveBeenCalledTimes(1);
+      expect(defaultProps.onSubmit).toHaveBeenCalledWith(defaultState.text);
     });
 
     afterAll(() => {
-        defaultProps.onSubmit.mockReset();
+      defaultProps.onSubmit.mockReset();
     });
   });
 

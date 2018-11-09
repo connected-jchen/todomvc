@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import InputBox from './InputBox';
 
@@ -13,7 +12,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <InputBox onSubmit={todo => this.setState((prevState) => ({todos: [...prevState.todos, todo]}))} />
+        <InputBox onSubmit={todo => this.setState((prevState) => ({ todos: [...prevState.todos, todo] }))} />
         <ul>
           {this.state.todos.map((x, i) => <li key={i}>{x}</li>)}
         </ul>

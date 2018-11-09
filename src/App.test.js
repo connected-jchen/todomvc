@@ -18,12 +18,12 @@ describe('App', () => {
     const newItem = 'new todo';
 
     beforeAll(() => {
-      wrapper.setState(defaultState);      
+      wrapper.setState(defaultState);
       const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');
       onSubmitDelegate(newItem);
     })
 
-    it('should be updated in state', () => {      
+    it('should be updated in state', () => {
       expect(wrapper.state('todos')).toContain(newItem);
     });
 
