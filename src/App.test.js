@@ -10,47 +10,34 @@ describe('App', () => {
 
   const wrapper = shallow(<App />);
 
-  it('renders without crashing', () => {
-    expect(wrapper.exists()).toBeTruthy();
-  });
+  describe('when it is rendered', () => {
 
-  it('should call fetch api with a GET request when rendered', () => {
-    const temp = fetch;
-    fetch = jest.fn();
+    it('should not crash', () => {
+      expect(wrapper.exists()).toBeTruthy();
+    });
 
-    shallow(<App />);
-    expect(fetch).toBeCalled();
+    it('should call fetch with correct url', () => {
+      jest.spyOn(global, 'fetch');
+      shallow(<App />);
 
-    fetch = temp;
-  })
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(global.fetch).toHaveBeenCalledWith('https://webtestclub-todo.herokuapp.com/todo/');
+    })
 
-  it('should call fetch api with correct URL when rendered', () => {
-    const temp = fetch;
-    fetch = jest.fn();
+    it('should set correct state after fetch', (done) => {
+      const jsonResponse = Promise.resolve({ "message": "Ok!", "body": [{ "id": 50, "todo": "buy milk" }] });
+      const mockResponse = Promise.resolve({ json: () => jsonResponse });
 
-    shallow(<App/>);
-    expect(fetch.mock.calls[0][0]).toEqual('URL');
+      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
 
-    fetch = temp;
-  })
+      const wrapper = shallow(<App />);
 
-  it('should set the correct state into the component', (done) => {
-    const temp = fetch;
-    fetch = jest.fn(() => Promise.resolve(
-      {json: () => {
-        Promise.resolve({
-        "message":"Ok!", "body":[{"id":50,"todo":"buy milk"}]}
-      )
-      done();
-    }
-          
-        }
-    ));
-
-    const wrapper = shallow(<App/>);
-    expect(wrapper.state()).toEqual({todos: ["buy milk"]})
-
-    fetch = temp;
+      // Have to wait
+      setTimeout(() => {
+        expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] });
+        done();
+      }, 3000)
+    })
   })
 
   describe('when a new item is added', () => {

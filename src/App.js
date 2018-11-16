@@ -10,15 +10,13 @@ class App extends Component {
       todos: []
     }
   }
-  componentDidMount() {
-    // TODO: fetch api endpoint to get todo items
+  componentDidMount() {    
     fetch('https://webtestclub-todo.herokuapp.com/todo/')
       .then(res => res.json())
-      .then(jsonBody => {
-        console.log(jsonBody);
-        this.setState({todos: jsonBody.body});
+      .then(json => {
+        console.log(json);
+        this.setState({todos: json.body});
       });
-    
     // TODO: set state TODO
   }
   render() {
