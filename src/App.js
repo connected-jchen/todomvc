@@ -7,7 +7,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      todos: []
+      todos: [],
     }
   }
   componentDidMount() {    
@@ -15,14 +15,27 @@ class App extends Component {
       .then(res => res.json())
       .then(json => {
         console.log(json);
-        this.setState({todos: json.body});
+        this.setState({todos: json.body.map( (item) => item.todo)});
+      })
+      .catch((err) => {
+        this.setState({errorState : err})
       });
-    // TODO: set state TODO
+  }
+  handleSubmitNewTodo = (todo) => {
+    fetch('https://webtestclub-todo.herokuapp.com/todo/',
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json; charset=utf-8'},
+        body: JSON.stringify({'todo': todo}),
+      })
+    .then(() => {
+      this.setState({todos: [...this.state.todos, todo]})
+    });  
   }
   render() {
     return (
       <div className="App">
-        <InputBox onSubmit={todo => this.setState((prevState) => ({ todos: [...prevState.todos, todo] }))} />
+        <InputBox onSubmit={this.handleSubmitNewTodo} />
         <TodoList todos={this.state.todos} />
       </div>
     );
