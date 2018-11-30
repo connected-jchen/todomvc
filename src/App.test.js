@@ -24,6 +24,11 @@ describe('App', () => {
       expect(global.fetch).toHaveBeenCalledWith('https://webtestclub-todo.herokuapp.com/todo/');
     })
 
+    it('should not show validation message', () => {
+      const validationMsg = wrapper.find('.validation-msg');
+      expect(validationMsg).toHaveLength(0);
+    });
+
     it('should set correct state after fetch', (done) => {
       const jsonResponse = Promise.resolve({ "message": "Ok!", "body": [{ "id": 50, "todo": "buy milk" }] });
       const mockResponse = Promise.resolve({ json: () => jsonResponse });
@@ -36,7 +41,7 @@ describe('App', () => {
       setTimeout(() => {
         expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] });
         done();
-      }, 0);
+      });
     })
 
     it("should show empty list when fetch fails", (done) => {
@@ -51,9 +56,9 @@ describe('App', () => {
       setTimeout(() => {
         expect(wrapper.update().state().todos).toEqual([]);
         done();
-      }, 0);
+      });
     });
-    
+
     it("should set error state when fetch fails", (done) => {
       const error = new Error('Bad failure is bad');
       const jsonResponse = Promise.reject(error);
@@ -67,12 +72,11 @@ describe('App', () => {
         // console.log(wrapper.update().state());
         expect(wrapper.update().state().errorState).toEqual(error);
         done();
-      }, 0);
-      
+      });
     })
   })
 
-  
+
   describe('when a new item is added', () => {
     const newItem = 'new todo';
 
@@ -83,7 +87,7 @@ describe('App', () => {
     })
 
     it('should be updated in state', () => {
-      const jsonResponse = Promise.resolve({"message":"Created!"});
+      const jsonResponse = Promise.resolve({ "message": "Created!" });
       const mockResponse = Promise.resolve({ json: () => jsonResponse });
       jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
 
@@ -92,14 +96,58 @@ describe('App', () => {
         'https://webtestclub-todo.herokuapp.com/todo/',
         {
           method: 'POST',
-          headers: {'Content-Type': 'application/json; charset=utf-8'},
-          body: JSON.stringify({'todo': 'new todo'}),
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify({ 'todo': 'new todo' }),
         }
       );
     });
 
     it('should render the newly added item', () => {
-      expect(wrapper.find('TodoList').props().todos).toEqual([...defaultState.todos, newItem]);
+      // .props().todo v.s. .prop('todo'), latter one conveys the intention
+      expect(wrapper.find('TodoList').prop('todos')).toEqual([...defaultState.todos, newItem]);
     });
+  });
+
+  describe('when a new item is added and it has a duplicated value', () => {
+
+    const defaultState = { todos: ['my-todo'] };
+    const newItem = 'my-todo';
+
+    beforeAll(() => {
+      const mockResponse = Promise.reject(newItem);
+      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
+    });
+
+    it('should fail client side validation', () => {
+      // TODO:
+    });
+
+    it('should display the server side validation message saying duplicated todo item is not allowed', (done) => {
+      wrapper.setState(defaultState);
+      const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');
+
+      // TODO for me: notes for the debate
+      onSubmitDelegate(newItem)
+        .then(() => {
+          // get the validation message compoennt
+          const validationMsg = wrapper.find('.validation-msg');
+          // assert the visibility of the component
+          expect(validationMsg).toHaveLength(1);
+          // assert the value (message) inside of the compoennt
+          expect(validationMsg.text()).toEqual('my-todo already exists');
+          done();
+        });
+    });
+  });
+
+  describe('when an existing item is deleted', () => {
+    it('should fire a DELET http request to server api', () => {
+      // TODO:
+    });
+    it('should remove the element from the DOM', () => {
+      // TODO:
+    });
+    
   })
+
 });
