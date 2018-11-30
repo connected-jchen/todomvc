@@ -122,11 +122,16 @@ describe('App', () => {
       // TODO:
     });
 
-    it('should display the server side validation message saying duplicated todo item is not allowed', (done) => {
+    it('should display the server side validation message', (done) => {
       wrapper.setState(defaultState);
       const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');
 
-      // TODO for me: notes for the debate
+      // `onSubmitDelegate` invokes a series of asynchronous operations
+      // And the test assertion dependes on the final state of the execution
+      // We return a promise from `App.handleSubmitNewTodo()` to workaround this
+      // There is also another option to use setTimeout(callback)
+      // However, it is semantically weaker and does not guarentee by the
+      // time callback is called, the async operation has finished
       onSubmitDelegate(newItem)
         .then(() => {
           // get the validation message compoennt
@@ -141,7 +146,7 @@ describe('App', () => {
   });
 
   describe('when an existing item is deleted', () => {
-    it('should fire a DELET http request to server api', () => {
+    it('should fire a DELETE http request to server api', () => {
       // TODO:
     });
     it('should remove the element from the DOM', () => {
