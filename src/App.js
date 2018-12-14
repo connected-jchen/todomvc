@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import InputBox from './InputBox';
 import TodoList from './TodoList';
+import { resolve } from 'url';
 
 class App extends Component {
   constructor(props) {
@@ -11,30 +12,38 @@ class App extends Component {
       errorState: undefined,
     }
   }
-  componentDidMount() {    
+  componentDidMount() {
     return fetch('https://webtestclub-todo.herokuapp.com/todo/')
       .then(res => res.json())
-      .then(json => {
-        console.log(json);
-        this.setState({todos: json.body.map( (item) => item.todo)});
+      .then(json => {        
+        this.setState({ todos: json.body.map((item) => item.todo) });
       })
       .catch((err) => {
-        this.setState({errorState : err});
-      });      
+        this.setState({ errorState: err });
+      });
   }
   handleSubmitNewTodo = (todo) => {
-    return fetch('https://webtestclub-todo.herokuapp.com/todo/',
+    return new Promise((resolve, reject) => {
+      if (this.state.todos.includes(todo)){
+        reject(todo);
+      } 
+      else {
+        resolve(todo);
+      }
+    }).then((todo) => {
+      return fetch('https://webtestclub-todo.herokuapp.com/todo/',
       {
         method: 'POST',
-        headers: {'Content-Type': 'application/json; charset=utf-8'},
-        body: JSON.stringify({'todo': todo}),
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ 'todo': todo }),
       })
-    .then(() => {
-      this.setState({todos: [...this.state.todos, todo]});
+    }).then(() => {
+      this.setState({ todos: [...this.state.todos, todo] });
     })
     .catch((err) => {
-      this.setState({errorState : err});
-    });  
+      this.setState({ errorState: err });
+    });
+    
   }
   render() {
     return (

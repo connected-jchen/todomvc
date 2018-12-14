@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 
 const defaultState = {
   todos: ["foo", "bar"],
+  errorState: undefined,
 };
 
 describe('App', () => {
@@ -37,11 +38,20 @@ describe('App', () => {
 
       const wrapper = shallow(<App />);
 
-      // Have to wait
+      // schedule a task in next event loop
       setTimeout(() => {
         expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] });
         done();
       });
+
+      // schedule a task in next-tick queue, which will be ran asynchronously before microtask queue
+      // process.nextTick(() => {
+      //   expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] });
+      //   done();
+      // });
+
+      // schedule a task in micro-task queue, which will be ran before next event loop
+      // return Promise.resolve(() => expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] }));
     })
 
     it("should show empty list when fetch fails", (done) => {
@@ -52,7 +62,7 @@ describe('App', () => {
 
       const wrapper = shallow(<App />);
 
-      // // Have to wait
+      // Have to wait
       setTimeout(() => {
         expect(wrapper.update().state().todos).toEqual([]);
         done();
@@ -114,15 +124,29 @@ describe('App', () => {
     const newItem = 'my-todo';
 
     beforeAll(() => {
-      const mockResponse = Promise.reject(newItem);
-      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
     });
 
+    // TODO:
     it('should fail client side validation', () => {
-      // TODO:
+      wrapper.setState(defaultState);
+      const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');
+
+      onSubmitDelegate(newItem)
+        .then(() => {
+          // get the validation message compoennt
+          const validationMsg = wrapper.find('.validation-msg');
+          // assert the visibility of the component
+          expect(validationMsg).toHaveLength(1);
+          // assert the value (message) inside of the compoennt
+          expect(validationMsg.text()).toEqual('my-todo already exists');
+          done();
+        });
     });
 
     it('should display the server side validation message', (done) => {
+      const mockResponse = Promise.reject(newItem);
+      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
+      
       wrapper.setState(defaultState);
       const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');
 
@@ -146,13 +170,12 @@ describe('App', () => {
   });
 
   describe('when an existing item is deleted', () => {
-    it('should fire a DELETE http request to server api', () => {
-      // TODO:
-    });
-    it('should remove the element from the DOM', () => {
-      // TODO:
-    });
-    
+
+    // TODO:
+    it('should fire a DELETE http request to server api', () => { });
+
+    // TODO:
+    it('should remove the element from the DOM', () => { });
   })
 
 });
