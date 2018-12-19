@@ -126,7 +126,6 @@ describe('App', () => {
     beforeAll(() => {
     });
 
-    // TODO:
     it('should fail client side validation', () => {
       wrapper.setState(defaultState);
       const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');
@@ -144,8 +143,10 @@ describe('App', () => {
     });
 
     it('should display the server side validation message', (done) => {
+
       const mockResponse = Promise.reject(newItem);
       jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
+      jest.spyOn(global, 'todoValidation').mockImplementation
       
       wrapper.setState(defaultState);
       const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');

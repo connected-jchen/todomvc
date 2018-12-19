@@ -15,7 +15,7 @@ class App extends Component {
   componentDidMount() {
     return fetch('https://webtestclub-todo.herokuapp.com/todo/')
       .then(res => res.json())
-      .then(json => {        
+      .then(json => {
         this.setState({ todos: json.body.map((item) => item.todo) });
       })
       .catch((err) => {
@@ -23,28 +23,36 @@ class App extends Component {
       });
   }
   handleSubmitNewTodo = (todo) => {
+    // return this.clientValidationPromise(todo)
+      // .then(this.createTodoServerPromise)
+      return createTodoService(todo)
+      .then(() => {
+        this.setState({ todos: [...this.state.todos, todo] });
+      })
+      .catch((err) => {
+        this.setState({ errorState: err });
+      });
+
+  }
+  createTodoServerPromise(todo) {
+    return fetch('https://webtestclub-todo.herokuapp.com/todo/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ 'todo': todo }),
+    });
+  }
+
+  clientValidationPromise(todo) {
     return new Promise((resolve, reject) => {
-      if (this.state.todos.includes(todo)){
+      if (this.state.todos.includes(todo)) {
         reject(todo);
-      } 
+      }
       else {
         resolve(todo);
       }
-    }).then((todo) => {
-      return fetch('https://webtestclub-todo.herokuapp.com/todo/',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify({ 'todo': todo }),
-      })
-    }).then(() => {
-      this.setState({ todos: [...this.state.todos, todo] });
-    })
-    .catch((err) => {
-      this.setState({ errorState: err });
     });
-    
   }
+
   render() {
     return (
       <div className="App">
