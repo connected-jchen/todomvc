@@ -38,54 +38,42 @@ describe('App', () => {
 
       const wrapper = shallow(<App />);
 
-      // schedule a task in next event loop
       setTimeout(() => {
         expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] });
         done();
+      })
+
+      it("should show empty list when fetch fails", (done) => {
+        const jsonResponse = Promise.reject(new Error('Bad failure is bad'));
+        const mockResponse = Promise.resolve({ json: () => jsonResponse });
+
+        jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
+
+        const wrapper = shallow(<App />);
+
+        // Have to wait
+        setTimeout(() => {
+          expect(wrapper.update().state().todos).toEqual([]);
+          done();
+        });
       });
 
-      // schedule a task in next-tick queue, which will be ran asynchronously before microtask queue
-      // process.nextTick(() => {
-      //   expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] });
-      //   done();
-      // });
+      it("should set error state when fetch fails", (done) => {
+        const error = new Error('Bad failure is bad');
+        const jsonResponse = Promise.reject(error);
+        const mockResponse = Promise.resolve({ json: () => jsonResponse });
 
-      // schedule a task in micro-task queue, which will be ran before next event loop
-      // return Promise.resolve(() => expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] }));
+        jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
+
+        const wrapper = shallow(<App />);
+
+        setTimeout(() => {
+          expect(wrapper.update().state().errorState).toEqual(error.message);
+          done();
+        });
+      })
     })
-
-    it("should show empty list when fetch fails", (done) => {
-      const jsonResponse = Promise.reject(new Error('Bad failure is bad'));
-      const mockResponse = Promise.resolve({ json: () => jsonResponse });
-
-      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
-
-      const wrapper = shallow(<App />);
-
-      // Have to wait
-      setTimeout(() => {
-        expect(wrapper.update().state().todos).toEqual([]);
-        done();
-      });
-    });
-
-    it("should set error state when fetch fails", (done) => {
-      const error = new Error('Bad failure is bad');
-      const jsonResponse = Promise.reject(error);
-      const mockResponse = Promise.resolve({ json: () => jsonResponse });
-
-      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
-
-      const wrapper = shallow(<App />);
-
-      setTimeout(() => {
-        // console.log(wrapper.update().state());
-        expect(wrapper.update().state().errorState).toEqual(error);
-        done();
-      });
-    })
-  })
-
+  });
 
   describe('when a new item is added', () => {
     const newItem = 'new todo';
@@ -134,35 +122,6 @@ describe('App', () => {
         .then(() => {
           // get the validation message compoennt
           const validationMsg = wrapper.find('.validation-msg');
-          // assert the visibility of the component
-          expect(validationMsg).toHaveLength(1);
-          // assert the value (message) inside of the compoennt
-          expect(validationMsg.text()).toEqual('my-todo already exists');
-          done();
-        });
-    });
-
-    it('should display the server side validation message', (done) => {
-
-      const mockResponse = Promise.reject(newItem);
-      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
-      jest.spyOn(global, 'todoValidation').mockImplementation
-      
-      wrapper.setState(defaultState);
-      const onSubmitDelegate = wrapper.find('InputBox').prop('onSubmit');
-
-      // `onSubmitDelegate` invokes a series of asynchronous operations
-      // And the test assertion dependes on the final state of the execution
-      // We return a promise from `App.handleSubmitNewTodo()` to workaround this
-      // There is also another option to use setTimeout(callback)
-      // However, it is semantically weaker and does not guarentee by the
-      // time callback is called, the async operation has finished
-      onSubmitDelegate(newItem)
-        .then(() => {
-          // get the validation message compoennt
-          const validationMsg = wrapper.find('.validation-msg');
-          // assert the visibility of the component
-          expect(validationMsg).toHaveLength(1);
           // assert the value (message) inside of the compoennt
           expect(validationMsg.text()).toEqual('my-todo already exists');
           done();
@@ -179,4 +138,4 @@ describe('App', () => {
     it('should remove the element from the DOM', () => { });
   })
 
-});
+})
