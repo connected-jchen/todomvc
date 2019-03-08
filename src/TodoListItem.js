@@ -4,7 +4,7 @@ class TodoListItem extends Component {
     render() {
         const label = this.props.label;
         return (
-                <li>{label} <button className="complete">complete</button></li>
+            <li>{label} <button className="complete">complete</button></li>
         );
     }
 }

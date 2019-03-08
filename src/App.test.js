@@ -42,36 +42,36 @@ describe('App', () => {
         expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] });
         done();
       })
+    })
 
-      it("should show empty list when fetch fails", (done) => {
-        const jsonResponse = Promise.reject(new Error('Bad failure is bad'));
-        const mockResponse = Promise.resolve({ json: () => jsonResponse });
+    it("should show empty list when fetch fails", (done) => {
+      const jsonResponse = Promise.reject(new Error('Bad failure is bad'));
+      const mockResponse = Promise.resolve({ json: () => jsonResponse });
 
-        jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
+      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
 
-        const wrapper = shallow(<App />);
+      const wrapper = shallow(<App />);
 
-        // Have to wait
-        setTimeout(() => {
-          expect(wrapper.update().state().todos).toEqual([]);
-          done();
-        });
+      // Have to wait
+      setTimeout(() => {
+        expect(wrapper.update().state().todos).toEqual([]);
+        done();
       });
+    });
 
-      it("should set error state when fetch fails", (done) => {
-        const error = new Error('Bad failure is bad');
-        const jsonResponse = Promise.reject(error);
-        const mockResponse = Promise.resolve({ json: () => jsonResponse });
+    it("should set error state when fetch fails", (done) => {
+      const error = new Error('Bad failure is bad');
+      const jsonResponse = Promise.reject(error);
+      const mockResponse = Promise.resolve({ json: () => jsonResponse });
 
-        jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
+      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
 
-        const wrapper = shallow(<App />);
+      const wrapper = shallow(<App />);
 
-        setTimeout(() => {
-          expect(wrapper.update().state().errorState).toEqual(error.message);
-          done();
-        });
-      })
+      setTimeout(() => {
+        expect(wrapper.update().state().errorState).toEqual(error.message);
+        done();
+      });
     })
   });
 
