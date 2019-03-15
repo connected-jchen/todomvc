@@ -31,7 +31,6 @@ describe('TodoListItem', () => {
         const completeBtn = wrapper.find('.complete-btn');
         completeBtn.simulate('click');
 
-        // TODO:
         it('should fire onComplete callback', () => {
             // Assert
             expect(onCompleteMock.mock.calls).toHaveLength(1)

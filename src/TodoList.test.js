@@ -30,7 +30,6 @@ describe('TodoList', () => {
             expect(wrapper.find(TodoListItem).at(1).props().label).toEqual('bar');
         });
 
-        // TODO:
         it('should render two checkboxes with className "todo-checkbox"', () => {
             // Assert
             expect(wrapper.find(".todo-checkbox")).toHaveLength(2);
@@ -39,13 +38,21 @@ describe('TodoList', () => {
             // Fix
         });
 
-        // TODO:
         it('should render a button with className "complete-selected-btn"', () => {
             // Assert
             expect(wrapper.find(".complete-selected-btn").exists()).toBeTruthy();
             // Watch it fail
             // Fix
         });
+
+        // TODO
+        it('should render the complete selected button with text "compelte selected todo items"', () => {
+            // Assert            
+            // Watch it fail
+            // Fix
+        });
+        
+        
     });
 
     describe('when first TodoItem onComplete handler is fired', () => {
@@ -56,7 +63,6 @@ describe('TodoList', () => {
         const firstTodoListItem = todoListItems.at(0);
         firstTodoListItem.simulate('complete');
 
-        // TODO:
         it('should fire onComplete with an array containing the todo item', () => {
             // Assert
             expect(onCompleteMock.mock.calls).toHaveLength(1)
@@ -74,7 +80,6 @@ describe('TodoList', () => {
         const firstTodoCheckBox = wrapper.find('.todo-checkbox').at(0);
         firstTodoCheckBox.simulate('change');
 
-        // TODO:
         it('should set the first checkbox checked prop to true', () => {
             // Assert
             expect(wrapper.update().find('.todo-checkbox').at(0).props().checked).toEqual(true);
@@ -92,6 +97,6 @@ describe('TodoList', () => {
             // Assert
             // Watch it fail
             // Fix
-        })
+        });
     });
 });
