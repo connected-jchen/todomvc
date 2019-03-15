@@ -2,12 +2,31 @@ import React, { Component } from 'react';
 import TodoListItem from './TodoListItem';
 
 class TodoList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedTodos: [],
+        };
+    }
     render() {
         const todos = this.props.todos || [];
         return (
-            <ul>
-                {todos.map((x, i) => <TodoListItem key={i} label={x}/> )}
-            </ul>
+            <div>
+                <button className="complete-selected-btn" />
+                <ul>
+                    {todos.map((x, i) => {
+                        return <div key={i}>
+                            <input type="checkbox"
+                                className="todo-checkbox"
+                                onChange={() => { this.setState({ selectedTodos: [...this.state.selectedTodos, x] }) }}
+                                checked={this.state.selectedTodos.includes(x)} />
+                            <TodoListItem label={x} onComplete={() => {
+                                this.props.onComplete([x])
+                            }} /></div>
+                    })
+                    }
+                </ul>
+            </div>
         );
     }
 }

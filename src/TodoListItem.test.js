@@ -4,7 +4,8 @@ import { shallow } from 'enzyme';
 
 
 describe('TodoListItem', () => {
-    const defaultProps = { label: 'alex' };
+    const onCompleteMock = jest.fn();
+    const defaultProps = { label: 'alex', onComplete: onCompleteMock };
 
     describe('when it is rendered', () => {
         // Arrange
@@ -28,11 +29,12 @@ describe('TodoListItem', () => {
         // Arrange
         const wrapper = shallow(<TodoListItem {...defaultProps} />)
         const completeBtn = wrapper.find('.complete-btn');
-        // TODO: Act
+        completeBtn.simulate('click');
 
         // TODO:
         it('should fire onComplete callback', () => {
             // Assert
+            expect(onCompleteMock.mock.calls).toHaveLength(1)
             // Watch it fail
             // Fix
         });
