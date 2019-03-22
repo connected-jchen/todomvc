@@ -12,7 +12,7 @@ class TodoList extends Component {
         const todos = this.props.todos || [];
         return (
             <div>
-                <button className="complete-selected-btn" />
+                <button className="complete-selected-btn" onClick={() => this.props.onComplete(this.state.selectedTodos)} disabled={true} >complete selected todo items</button>
                 <ul>
                     {todos.map((x, i) => {
                         return <div key={i}>

@@ -129,10 +129,20 @@ describe('App', () => {
     });
   });
 
-  describe('when an existing item is deleted', () => {
+  describe('when an existing item is completed', () => {
+
+    // Create list with default state
+    beforeEach(() => {
+      wrapper.setState(defaultState);
+    });
 
     // TODO:
-    it('should fire a DELETE http request to server api', () => { });
+    it('should fire a DELETE http request to server api', () => { 
+      const jsonResponse = Promise.resolve({ "message": "" });
+      const mockResponse = Promise.resolve({ json: () => jsonResponse });
+      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
+
+    });
 
     // TODO:
     it('should remove the element from the DOM', () => { });

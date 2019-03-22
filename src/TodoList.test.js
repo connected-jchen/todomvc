@@ -6,9 +6,12 @@ import { doesNotReject } from 'assert';
 
 
 describe('TodoList', () => {
-
     const defaultProps = { todos: ['foo', 'bar'] };
     const onCompleteMock = jest.fn();
+
+    beforeEach(() => {
+        onCompleteMock.mockReset();
+    });
 
     describe('when it is rendered', () => {
         // Arrange
@@ -45,28 +48,39 @@ describe('TodoList', () => {
             // Fix
         });
 
-        // TODO
-        it('should render the complete selected button with text "compelte selected todo items"', () => {
-            // Assert            
-            // Watch it fail
+        it('should render the complete selected todos button with text "complete selected todo items"', () => {
+            // Assert     
+            expect(wrapper.find('.complete-selected-btn').text()).toEqual('complete selected todo items');
+            // Watch it fail    
             // Fix
         });
         
+        it('should render a disabled "complete selected todos button" when no items are selected', () => {
+            // Arrange
+            wrapper.setState({selectedTodos: []})
+            
+            // Assert
+            expect(wrapper.find('.complete-selected-btn').props().disabled).toEqual(true);
+            // Watch it fail    
+            // Fix
+        });
         
     });
 
     describe('when first TodoItem onComplete handler is fired', () => {
         // Arrange
         const wrapper = shallow(<TodoList {...defaultProps} onComplete={onCompleteMock} />)
-        // Act
         const todoListItems = wrapper.find(TodoListItem);
         const firstTodoListItem = todoListItems.at(0);
-        firstTodoListItem.simulate('complete');
+
+        beforeEach(() => {
+            // Act
+            firstTodoListItem.simulate('complete');
+        });
 
         it('should fire onComplete with an array containing the todo item', () => {
             // Assert
-            expect(onCompleteMock.mock.calls).toHaveLength(1)
-            expect(onCompleteMock.mock.calls[0][0]).toEqual(['foo'])
+            expect(onCompleteMock).toHaveBeenCalledWith(['foo'])
             // Watch it fail
             // Fix
         });
@@ -88,13 +102,20 @@ describe('TodoList', () => {
         });
     });
 
-    describe('when complete selected button onClick handler is fired and there are two checkboxes checked', () => {
+    describe('when complete selected todos button\' onClick handler is fired and there are two checkboxes checked', () => {
         // Arrange
-        // Act
+        const wrapper = shallow(<TodoList {...defaultProps} onComplete={onCompleteMock}/>)
+        wrapper.setState({selectedTodos: ['foo', 'bar']});
 
-        //TODO:
+        // Act
+        beforeEach(() => {
+            wrapper.find('.complete-selected-btn').simulate('click');
+        });
+
         it('should fire onComplete with an array containing the two todo items', () => {
             // Assert
+            expect(onCompleteMock).toHaveBeenCalledWith(['foo', 'bar']);
+
             // Watch it fail
             // Fix
         });
