@@ -129,23 +129,37 @@ describe('App', () => {
     });
   });
 
-  describe('when an existing item is completed', () => {
 
-    // Create list with default state
-    beforeEach(() => {
-      wrapper.setState(defaultState);
+  // TODO
+  describe('when onComplete handler is triggered with a list of two todo items', () => {
+
+    // Arrange 
+    // Act
+
+    // TODO: 
+    it('should display a loading text', () => {
+      // Assert
+    });
+
+    // TODO: 
+    it('should fire two DELETE http requests for each todo items in the list', () => {
+      // Assert
+    });
+
+    // TODO: 
+    it('should fire two DELETE http requests for each todo items in the list', () => {
+      // Assert
+    });
+
+    // TODO: 
+    it('should render an error when one of the requests have failed', () => {
+      // Assert
     });
 
     // TODO:
-    it('should fire a DELETE http request to server api', () => { 
-      const jsonResponse = Promise.resolve({ "message": "" });
-      const mockResponse = Promise.resolve({ json: () => jsonResponse });
-      jest.spyOn(global, 'fetch').mockImplementation(() => mockResponse);
-
+    it('should re-render the todo list', () => {
+      // Assert
     });
-
-    // TODO:
-    it('should remove the element from the DOM', () => { });
   })
 
 })
