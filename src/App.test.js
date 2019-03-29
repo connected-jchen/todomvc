@@ -2,6 +2,7 @@ import React from 'react';
 import App from './App';
 import { shallow } from 'enzyme';
 import TodoList from './TodoList';
+import { isSymbol } from 'util';
 
 const defaultState = {
   todos: ["foo", "bar"],
@@ -135,8 +136,7 @@ describe('App', () => {
   });
 
 
-  // TODO
-  xdescribe('when onComplete handler is triggered with a list of two todo items', () => {
+  describe('when onComplete handler is triggered with a list of two todo items', () => {
 
     // Arrange 
     const defaultState = { todos: ['my-todo'],  };
@@ -147,8 +147,7 @@ describe('App', () => {
     });
 
     // Act
-
-    // TODO: 
+    
     it('should display a loading text', () => {
       wrapper.setState(defaultState);
       wrapper.find(TodoList).simulate("complete", ["string1", "string2"]);
@@ -179,14 +178,8 @@ describe('App', () => {
       
     });
 
-    // TODO: 
-    it('should render an error when one of the requests have failed', () => {
-      // Assert
-    });
+    it('should re-render the todo list by fetching all todos again', () => {
 
-    // TODO:
-    it('should re-render the todo list', () => {
-      // Assert
     });
   })
 

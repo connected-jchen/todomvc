@@ -52,13 +52,17 @@ class App extends Component {
     });
   }
 
+  handleTodosComplete(todos) {
+    this.setState({loading: true});
+  }
+
   render() {
     return (
       <div className="App">
       {this.state.loading && <div className="loading"/>}
         <InputBox onSubmit={this.handleSubmitNewTodo} />
         {this.state.errorState && (<p className="validation-msg">{this.state.errorState}</p>)}
-        <TodoList todos={this.state.todos} onComplete={() => this.setState({loading: true})} />
+        <TodoList todos={this.state.todos} onComplete={this.handleTodosComplete.bind(this)} />
       </div>
     );
   }
