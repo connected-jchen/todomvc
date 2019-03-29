@@ -136,7 +136,7 @@ describe('App', () => {
 
 
   // TODO
-  describe('when onComplete handler is triggered with a list of two todo items', () => {
+  xdescribe('when onComplete handler is triggered with a list of two todo items', () => {
 
     // Arrange 
     const defaultState = { todos: ['my-todo'],  };
