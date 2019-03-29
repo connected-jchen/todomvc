@@ -9,6 +9,7 @@ class App extends Component {
     this.state = {
       todos: [],
       errorState: undefined,
+      loading: false,
     }
   }
   componentDidMount() {
@@ -54,9 +55,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+      {this.state.loading && <div className="loading"/>}
         <InputBox onSubmit={this.handleSubmitNewTodo} />
         {this.state.errorState && (<p className="validation-msg">{this.state.errorState}</p>)}
-        <TodoList todos={this.state.todos} />
+        <TodoList todos={this.state.todos} onComplete={() => this.setState({loading: true})} />
       </div>
     );
   }

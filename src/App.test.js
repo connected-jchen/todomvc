@@ -1,6 +1,7 @@
 import React from 'react';
 import App from './App';
 import { shallow } from 'enzyme';
+import TodoList from './TodoList';
 
 const defaultState = {
   todos: ["foo", "bar"],
@@ -15,6 +16,10 @@ describe('App', () => {
 
     it('should not crash', () => {
       expect(wrapper.exists()).toBeTruthy();
+    });
+
+    it('should not have a loading class element', () => {
+      expect(wrapper.find(".loading").exists()).toBeFalsy();
     });
 
     it('should call fetch with correct url', () => {
@@ -39,7 +44,7 @@ describe('App', () => {
       const wrapper = shallow(<App />);
 
       setTimeout(() => {
-        expect(wrapper.update().state()).toEqual({ todos: ["buy milk"] });
+        expect(wrapper.update().state()).toHaveProperty( "todos", ["buy milk"]);
         done();
       })
     })
@@ -134,21 +139,44 @@ describe('App', () => {
   describe('when onComplete handler is triggered with a list of two todo items', () => {
 
     // Arrange 
+    const defaultState = { todos: ['my-todo'],  };
+    const newItem = 'my-todo';
+      
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
     // Act
 
     // TODO: 
     it('should display a loading text', () => {
-      // Assert
+      wrapper.setState(defaultState);
+      wrapper.find(TodoList).simulate("complete", ["string1", "string2"]);
+      expect(wrapper.find(".loading").exists()).toBeTruthy();
     });
 
     // TODO: 
     it('should fire two DELETE http requests for each todo items in the list', () => {
       // Assert
-    });
+      jest.spyOn(global, 'fetch').mockImplementation(() => {});    
 
-    // TODO: 
-    it('should fire two DELETE http requests for each todo items in the list', () => {
-      // Assert
+      wrapper.setState(defaultState);
+      wrapper.find(TodoList).simulate("complete", ["string1", "string2"]);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        'https://webtestclub-todo.herokuapp.com/todo/string1',
+        {
+          method: 'DELETE',
+        }
+      );
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        'https://webtestclub-todo.herokuapp.com/todo/string2',
+        {
+          method: 'DELETE',
+        }
+      );
+      
     });
 
     // TODO: 
