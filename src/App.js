@@ -54,6 +54,16 @@ class App extends Component {
 
   handleTodosComplete(todos) {
     this.setState({loading: true});
+    let deleteRequestPromises = [];
+    todos.forEach(element => {
+      deleteRequestPromises.push(fetch(`https://webtestclub-todo.herokuapp.com/todo/${element}`, {
+      method: 'DELETE',
+      }));
+    });
+
+    Promise.all(deleteRequestPromises).then(() => {
+      fetch(`https://webtestclub-todo.herokuapp.com/todo/`);
+    });
   }
 
   render() {
