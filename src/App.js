@@ -13,14 +13,15 @@ class App extends Component {
     }
   }
   componentDidMount() {
-    return fetch('https://webtestclub-todo.herokuapp.com/todo/')
-      .then(res => res.json())
-      .then(json => {
-        this.setState({ todos: json.body.map((item) => item.todo) });
-      })
-      .catch((err) => {
-        this.setState({ errorState: err.message });
-      });
+    this.props.fetchAllTodos();
+    // return fetch('https://webtestclub-todo.herokuapp.com/todo/')
+    //   .then(res => res.json())
+    //   .then(json => {
+    //     this.setState({ todos: json.body.map((item) => item.todo) });
+    //   })
+    //   .catch((err) => {
+    //     this.setState({ errorState: err.message });
+    //   });
   }
   handleSubmitNewTodo = (todo) => {
     return this.clientValidationPromise(todo)
