@@ -59,3 +59,32 @@ describe('App', () => {
   })
 
 });
+
+describe('SomeTodoItem', () => {
+
+  const wrapper = shallow('div');
+
+  it('should render', () => {
+    // Here you can make a series of checks that should ensure
+    // the default expecations are met
+  })
+
+  it('should check that componentDidMount things were done', () => {
+  
+  })
+
+  describe('if the item is disabled', () => {
+
+    it('should disable the checkbox', () => {
+
+    })
+
+  })
+
+  describe('if the item is enabled', () => {
+
+    it('should ')
+
+  })
+
+})
